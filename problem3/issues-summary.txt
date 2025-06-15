@@ -1,0 +1,33 @@
+16 issues found:
+
+1. Line 1-3: WalletBalance interface missing blockchain property but line 38 and 46-47 try to access balance.blockchain, TS will throw compilation error. Need to add blockchain: string to the interface.
+
+2. Line 19: getPriority parameter typed as blockchain: any instead of proper string type. Should use union types for supported blockchains.
+
+3. Line 39: use lhsPriority without declaration, it will crash the app with ReferenceError. Should be balancePriority instead.
+
+4. Line 40-42: Filter logic is backwards - keeps balances with amount <= 0 which makes no sense for a wallet display. Should filter out zero/negative balances and do not keep them.
+
+5. Line 36-54: getPriority function is used inside useMemo but not included in dependency array at line 54, this can cause stale closure bugs and incorrect memoization.
+
+6. Line 45-53: Sort function incomplete - doesn't handle case when priorities are equal, will give inconsistent ordering. Missing return statement for equal case.
+
+7. Line 56-61: formattedBalances is declared but never actually used anywhere, just wasted computation on every render. Either use it in rows mapping or remove it.
+
+8. Line 63: Type mismatch in rows mapping - sortedBalances is WalletBalance[] but mapped as FormattedWalletBalance, missing the formatted property will cause runtime errors.
+
+9. Line 67: classes.row is being used but classes never defined/imported, will either crash or styles won't work. Need to import or define the classes object.
+
+10. Line 68: use array index as React key prop is an anti-pattern, causes poor reconciliation performance and potential rendering bugs. should use unique identifier like balance.currency instead.
+
+11. Line 71: balance.formatted value doesn't exist because we're mapping over sortedBalances (WalletBalance[]) not formattedBalances, will cause runtime error.
+
+12. Line 56-61: formattedBalances is recalculated on every render without memoization. should use useMemo for expensive operations like that.
+
+13. Line 11-13: empty Props interface extending BoxProps is pointless
+
+14. Line 19-34: this function will be re-creates on every render
+
+15. Line 15: children destructured but never used
+
+16. No loading states or empty data handling
